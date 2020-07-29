@@ -40,7 +40,7 @@ const App: React.FC = () => {
     return (
       <div className='App'>
        <title>Image-ine</title>
-      <div>
+      <div className='App-content'>
           <h1>Welcome to Image-ine!</h1>
            <p>The world's leading image analysis software developed by a guy name Jachi</p>
         </div>
@@ -48,10 +48,13 @@ const App: React.FC = () => {
         <form>
         <TextField label="Please enter an image url" styles={{root:{marginTop: '10px'}}} onChange={updateUrl}/>
         </form>
-      
         <PrimaryButton text="Identify" styles={{root:{float: 'right', marginTop: '10px'}}} onClick={ImageAPI}/>
+
+        <div className='ImageContent'>
+          <img alt='A person or group of people' src={url}/>
+        </div>
+
        </div>
-      
       </div>
     );
 }
