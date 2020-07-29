@@ -5,8 +5,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 const App: React.FC = () => {
   const [url, setUrl] = React.useState('');
-  const apiKey = '5f84b864125b47538872227cc200a482';
-  const endpoint = 'https://faceid-workshop.cognitiveservices.azure.com/face/v1.0/detect'
+  const apiKey = 'YOUR_API_KEY';
+  const endpoint = 'YOUR_API_ENDPOINT';
   const params = `returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender`;
   
   const ImageAPI= (): Promise<void> | void => {
