@@ -53,9 +53,11 @@ const App: React.FC = () => {
     // Create a new image object
     const imageObj = new Image();
 
-    // Draw rectangles on all the faces identified
+    // Draw rectangles on and annotate all the faces identified
     function drawRect(payload: any): void { payload?.forEach((pay: any) => {
       ctx!.rect(pay['faceRectangle']['left'],pay['faceRectangle']['top'],pay['faceRectangle']['width'],pay['faceRectangle']['height']);
+      ctx!.font = 'bold 15px Arial';
+      ctx!.fillText(` ${pay['faceAttributes']['gender']} ${pay['faceAttributes']['age']}`, pay['faceRectangle']['left'], pay['faceRectangle']['top']);
     })
   };
     
@@ -96,7 +98,9 @@ const App: React.FC = () => {
         <PrimaryButton text="Identify" styles={{root:{float: 'right', marginTop: '10px'}}} onClick={ImageAPI}/>
 
         <div className='ImageContent'>
+          <h2>Original Photo</h2>
         <span><img alt='A person or group of people' src={url}/></span>
+        <h2>Analyzed Photo</h2>
           <canvas
             ref={canvas}
             width={mainWidth?.toString()}
