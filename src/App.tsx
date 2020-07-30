@@ -7,6 +7,8 @@ const App: React.FC = () => {
   const [url, setUrl] = React.useState('');
   const[mainWidth, setMainWidth] = React.useState<number|null>(0);
   const[mainHeight, setMainHeight] = React.useState<number|null>(0);
+  const[payload, setPayload] = React.useState<any[]>();
+
   const apiKey = 'YOUR_API_KEY';
   const endpoint = 'YOUR_API_ENDPOINT';
   const params = `returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender`;
@@ -22,7 +24,8 @@ const App: React.FC = () => {
    }
     ).then(async (response: Response) =>{
         if(response.ok){
-            const result:any = await response.json();
+            const result = await response.json();
+            setPayload(result);
             console.log(result)
        }
         else{
@@ -50,10 +53,17 @@ const App: React.FC = () => {
     // Create a new image object
     const imageObj = new Image();
 
+    // Draw rectangles on all the faces identified
+    function drawRect(payload: any): void { payload?.forEach((pay: any) => {
+      ctx!.rect(pay['faceRectangle']['left'],pay['faceRectangle']['top'],pay['faceRectangle']['width'],pay['faceRectangle']['height']);
+    })
+  };
+    
     // Set the image to be drawn starting from the left most corner of the canvas
-    imageObj.onload = function() {
+    imageObj.onload = () => {
       ctx!.drawImage(imageObj, 0, 0);
-      ctx!.rect(20,20,150,100);
+      drawRect(payload);
+      console.log(`I am the payload${payload}`);
       ctx!.stroke();
     };
     // Set the image source to be the url entered in the textfield
@@ -63,7 +73,7 @@ const App: React.FC = () => {
     //Dynamically set the size of the canvas to the size of the image
     setMainWidth(imageObj.width);
     setMainHeight(imageObj.height);
-  }, [url])
+  }, [url, mainHeight, mainWidth, payload])
 
   // Update the url hook whenever the value in the textfield changes
   const updateUrl = (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
@@ -77,7 +87,7 @@ const App: React.FC = () => {
        <title>Image-ine</title>
       <div className='App-content'>
           <h1>Welcome to Image-ine!</h1>
-           <p>The world's leading image analysis software developed by a guy name Jachi</p>
+           <p>The world's leading image analysis software developed by a guy named Jachi</p>
         </div>
         <div className='App-content'>
         <form>
