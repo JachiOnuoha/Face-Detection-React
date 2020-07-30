@@ -5,6 +5,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 const App: React.FC = () => {
   const [url, setUrl] = React.useState('');
+  const[mainWidth, setMainWidth] = React.useState<number|null>(0);
+  const[mainHeight, setMainHeight] = React.useState<number|null>(0);
   const apiKey = 'YOUR_API_KEY';
   const endpoint = 'YOUR_API_ENDPOINT';
   const params = `returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender`;
@@ -30,13 +32,46 @@ const App: React.FC = () => {
   
   };
 
+  // Making the identification Rectangle
+  const canvas = React.useRef<HTMLCanvasElement>(null);
+
+  React.useEffect(()=>{
+    // Dynamically allocated the size (width and height) of the canvas to match the size of the image
+    let canWidth = canvas.current ? canvas.current.width : null;
+    canWidth = canvas.current? canvas.current.clientWidth : null;
+    
+    let canHeight = canvas.current ? canvas.current.height : null;
+    canHeight = canvas.current? canvas.current.clientHeight : null;
+    
+
+    // Create the context  that will be used to draw on the canvas
+    const ctx: CanvasRenderingContext2D | null = canvas.current ? canvas.current.getContext('2d') : null;
+
+    // Create a new image object
+    const imageObj = new Image();
+
+    // Set the image to be drawn starting from the left most corner of the canvas
+    imageObj.onload = function() {
+      ctx!.drawImage(imageObj, 0, 0);
+      ctx!.rect(20,20,150,100);
+      ctx!.stroke();
+    };
+    // Set the image source to be the url entered in the textfield
+    imageObj.src = url;
+    console.log(imageObj.width);
+    
+    //Dynamically set the size of the canvas to the size of the image
+    setMainWidth(imageObj.width);
+    setMainHeight(imageObj.height);
+  }, [url])
+
+  // Update the url hook whenever the value in the textfield changes
   const updateUrl = (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
   if (newValue !== undefined) {
     setUrl(newValue);
   }
      };
 
-    // Add an onChange function to monitor the text field and work on making the onClick function call the API
     return (
       <div className='App'>
        <title>Image-ine</title>
@@ -51,7 +86,13 @@ const App: React.FC = () => {
         <PrimaryButton text="Identify" styles={{root:{float: 'right', marginTop: '10px'}}} onClick={ImageAPI}/>
 
         <div className='ImageContent'>
-          <img alt='A person or group of people' src={url}/>
+        <span><img alt='A person or group of people' src={url}/></span>
+          <canvas
+            ref={canvas}
+            width={mainWidth?.toString()}
+            height={mainHeight?.toString()}
+          />
+          
         </div>
 
        </div>
