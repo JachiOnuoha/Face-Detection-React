@@ -9,8 +9,8 @@ const App: React.FC = () => {
   const[mainHeight, setMainHeight] = React.useState<number|null>(0);
   const[payload, setPayload] = React.useState<any[]>();
 
-  const apiKey = 'YOUR_API_KEY';
-  const endpoint = 'YOUR_API_ENDPOINT';
+  const apiKey = '8b58d49354b44afa95f2e3e70caae818';
+  const endpoint = 'https://faceid-workshop.cognitiveservices.azure.com/face/v1.0/detect';
   const params = `returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender`;
   
   const ImageAPI= (): Promise<void> | void => {
@@ -39,14 +39,6 @@ const App: React.FC = () => {
   const canvas = React.useRef<HTMLCanvasElement>(null);
 
   React.useEffect(()=>{
-    // Dynamically allocated the size (width and height) of the canvas to match the size of the image
-    let canWidth = canvas.current ? canvas.current.width : null;
-    canWidth = canvas.current? canvas.current.clientWidth : null;
-    
-    let canHeight = canvas.current ? canvas.current.height : null;
-    canHeight = canvas.current? canvas.current.clientHeight : null;
-    
-
     // Create the context  that will be used to draw on the canvas
     const ctx: CanvasRenderingContext2D | null = canvas.current ? canvas.current.getContext('2d') : null;
 
